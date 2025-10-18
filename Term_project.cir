@@ -1,0 +1,26 @@
+[aimspice]
+[description]
+100
+TERM_PROJECT
+
+.include p18_cmos_models_tt.inc
+
+VIN 1 0 1 ac
+
+r1 1 2 10k
+r2 2 0 50k
+c2 2 0 1n
+[ac]
+0
+1000
+0
+200k
+[ana]
+0 1
+0
+0
+1 1
+1 1 0 5
+1
+v(2)
+[end]
