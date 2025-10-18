@@ -1,15 +1,18 @@
 [aimspice]
 [description]
-100
+143
 TERM_PROJECT
 
 .include p18_cmos_models_tt.inc
 
 VIN 1 0 1 ac
+VIN 3 0 1 ac
 
 r1 1 2 10k
 r2 2 0 50k
 c2 2 0 1n
+
+m1 2 1 0 0 PMOS L=1u W=2u
 [ac]
 0
 1000
