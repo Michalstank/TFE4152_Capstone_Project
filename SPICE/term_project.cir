@@ -1,18 +1,23 @@
 [aimspice]
 [description]
-143
+471
 TERM_PROJECT
+
+!Focuses on creating a current mirror discussed in chapter 6.3
 
 .include p18_cmos_models_tt.inc
 
-VIN 1 0 1 ac
-VIN 3 0 1 ac
+VDD		10_V		0_GND 1 dc
 
-r1 1 2 10k
-r2 2 0 50k
-c2 2 0 1n
+i_bias	1_bias 	10_V 50u
+i_in		3_in  	10_V 50u
 
-m1 2 1 0 0 PMOS L=1u W=2u
+!   Drain	Gate 		Source 	Base
+m_1 1_bias 	1_bias 	0_GND 	10_V 		PMOS L=1u W=1u
+m_2 3_in 	1_bias	 2_m2_m3 	4_m2_m4 	PMOS L=1u W=1u
+m_3 2_m2_m3 3_in 		0_GND 	5_m3_m5 	PMOS L=1u W=1u
+m_4 6_out	4_m2_m4	7_m4_m5	10_V		PMOS L=1u W=1u
+m_5 7_m4_m5 5_m3_m5	0_GND		10_V		PMOS L=1u W=1u
 [ac]
 0
 1000
@@ -25,5 +30,5 @@ m1 2 1 0 0 PMOS L=1u W=2u
 1 1
 1 1 0 5
 1
-v(2)
+v(6_out)
 [end]
