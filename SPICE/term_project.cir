@@ -5,30 +5,34 @@ TERM_PROJECT
 
 !Focuses on creating a current mirror discussed in chapter 6.3.3
 
-.include p18_cmos_models_tt.inc
+! Include the CMOS model file (TT = typical/nominal, FF = Decrease Vth, SS = Increase Vth)
+.include p18_cmos_models_tt.inc 
 
 .param I_in = 50u   ! Input current nominel 45u (40u-50u)
-.param WL = 0.5u    ! Transistor width/length parameter
+.param WL = 0.5u    ! Transistor width/length parameter (tweaked for design)
+.param VDD_supp = 1  ! Nominal supply voltage (test with 0%, +10% and -10% variation)
 !.param Ibias = 6.43u ! Bias current for current mirror
 
-VDD		10_V		0_GND 1 dc
+! Supply voltage 
+VDD		10_V	     0_GND     VDD_supp dc 
 
-i_bias1	11_Ibias 	10_V I_in*(4/7)
-i_bias2	12_Ibias 	10_V I_in*(1/7)
-i_bias3	13_Ibias 	10_V I_in*(1/7)
-i_bias4	14_Ibias 	10_V I_in*(4/7)
+i_in		10_Iin  	10_V      I_in
 
-i_in		10_Iin  	10_V I_in
+! Bias currents for current mirror
+i_bias1	11_Ibias 	10_V      I_in*(4/7)
+i_bias2	12_Ibias 	10_V      I_in*(1/7)
+i_bias3	13_Ibias 	10_V      I_in*(1/7)
+i_bias4	14_Ibias 	10_V      I_in*(4/7)
 
 ! Output side of current mirror
-!    Drain	Gate 	Source 	Base      Transistor Type and Size
+!    Drain	Gate 	Source 	Bulk      Transistor Type and Size
 m_1  1_Iout 	14_Ibias 	20_m124 	0_GND     NMOS L=WL W=WL*70
 m_2  20_m124 	10_Iin 	0_GND 	0_GND     NMOS L=WL W=WL*80
 m_3  14_Ibias  14_Ibias 	0_GND 	0_GND     NMOS L=WL W=WL*10
 m_4  13_Ibias  14_Ibias 	20_m124	0_GND     NMOS L=WL W=WL*10
 
 ! Input side of current mirror
-!    Drain     Gate      Source 	Base      Transistor Type and Size
+!    Drain     Gate      Source 	Bulk      Transistor Type and Size
 m_5  10_Iin    11_Ibias	22_m568	0_GND	NMOS L=WL W=WL*80
 m_6  22_m568   10_Iin	0_GND	0_GND	NMOS L=WL W=WL*70
 m_7  11_Ibias  12_Ibias	0_GND	0_GND	NMOS L=WL W=WL*10
