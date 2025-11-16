@@ -28,8 +28,8 @@ i_bias4	14_Ibias 	10_V      I_in*(4/7)
 !    Drain	Gate 	Source 	Bulk      Transistor Type and Size
 m_1  1_Iout 	14_Ibias 	20_m124 	0_GND     NMOS L=WL W=WL*70
 m_2  20_m124 	10_Iin 	0_GND 	0_GND     NMOS L=WL W=WL*80
-m_3  14_Ibias  14_Ibias 	0_GND 	0_GND     NMOS L=WL W=WL*10
-m_4  13_Ibias  14_Ibias 	20_m124	0_GND     NMOS L=WL W=WL*10
+m_3  14_Ibias  13_Ibias 	0_GND 	0_GND     NMOS L=WL W=WL*10
+m_4  13_Ibias  13_Ibias 	20_m124	0_GND     NMOS L=WL W=WL*10
 
 ! Input side of current mirror
 !    Drain     Gate      Source 	Bulk      Transistor Type and Size
