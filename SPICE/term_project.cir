@@ -38,18 +38,3 @@ m_6  22_m568   10_Iin	0_GND	0_GND	NMOS L=WL W=WL*70
 m_7  11_Ibias  12_Ibias	0_GND	0_GND	NMOS L=WL W=WL*10
 m_8  12_Ibias  12_Ibias	22_m568	0_GND	NMOS L=WL W=WL*10
 
-!simulation commands
-[ac]
-0
-1000
-0
-200k
-[ana]
-0 1
-0
-0
-1 1
-1 1 0 5
-1
-v(6_out)
-[end]
