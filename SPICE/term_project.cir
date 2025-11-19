@@ -11,7 +11,7 @@ TERM_PROJECT
 .param I_in = 50u   ! Input current nominel 45u (40u-50u)
 .param WL = 0.5u    ! Transistor width/length parameter (tweaked for design)
 .param VDD_supp = 1  ! Nominal supply voltage (test with 0%, +10% and -10% variation)
-!.param Ibias = 6.43u ! Bias current for current mirror
+!.param Ibias = 6.43u ! Bias current for current mirror (currently calculated from nominal Iin)
 
 ! Supply voltage 
 VDD		10_V	     0_GND     VDD_supp dc 
