@@ -7,18 +7,18 @@ TERM_PROJECT
 
 .include p18_cmos_models_tt.inc
 
-VDD		10_V		0_GND 1 dc
+VDD		Vdd		GND 1 dc
 
-i_bias	1_bias 	10_V 50u
-i_in		3_in  	10_V 50u
+i_bias	Ibias 	Vdd 50u
+i_in		In  	     Vdd 50u
 
-!   Drain	Gate 		Source 	Base
-m_1 1_bias 	1_bias 	0_GND 	10_V 		NMOS L=1u W=1u
-m_2 3_in 	1_bias	 2_m2_m3 	4_m2_m4 	NMOS L=1u W=1u
-m_3 2_m2_m3 3_in 		0_GND 	5_m3_m5 	NMOS L=1u W=1u
-m_4 6_out	4_m2_m4	7_m4_m5	10_V		NMOS L=1u W=1u
-m_5 7_m4_m5 5_m3_m5	0_GND		10_V		NMOS L=1u W=1u
+!   Drain	     Gate 	Source 	Base
+m_1 Out 	     1_bias 	n1 	     GND 		NMOS L=1u W=1u
+m_2 n1 	     In   	GND   	GND 	     NMOS L=1u W=1u
+m_3 n2         In        GND 	     GND 	     NMOS L=1u W=1u
+m_4 In	     Ibias	n2   	GND		NMOS L=1u W=1u
+m_5 Ibias      Ibias	GND	     GND		NMOS L=1u W=1u
 
-.connect 0_GND 0
+.connect GND 0
 .plot id(m_4) id(m_3)
 [end]
