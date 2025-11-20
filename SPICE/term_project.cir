@@ -1,6 +1,6 @@
 [aimspice]
 [description]
-1524
+1534
 TERM_PROJECT
 
 !Focuses on creating a current mirror discussed in chapter 6.3.3
@@ -9,9 +9,9 @@ TERM_PROJECT
 .include p18_cmos_models_tt.inc 
 
 .param I_in = -50u   ! Input current nominel 45u (40u-50u)
-.param WL = 0.5u    ! Transistor width/length parameter (tweaked for design)
+.param WL = 0.3u    ! Transistor width/length parameter (tweaked for design)
 .param VDD_supp = 3.3  ! Nominal supply voltage (test with 0%, +10% and -10% variation)
-.param Ibias = -6.43u ! Bias current for current mirror (currently calculated from nominal Iin)
+.param Ibias = {I_in/7} ! Bias current for current mirror (currently calculated from nominal Iin)
 
 ! Supply voltage 
 VDD		10_V	     0     VDD_supp dc 
@@ -20,10 +20,10 @@ Vout		1_Vout    0     3.3      dc
 i_in		10_Iin  	10_V      I_in
 
 ! Bias currents for current mirror
-i_bias1	11_Ibias 	10_V      Ibias*4
-i_bias2	12_Ibias 	10_V      Ibias*1
-i_bias3	13_Ibias 	10_V      Ibias*1
-i_bias4	14_Ibias 	10_V      Ibias*4
+i_bias1	11_Ibias 	10_V      {Ibias*4}
+i_bias2	12_Ibias 	10_V      {Ibias*1}
+i_bias3	13_Ibias 	10_V      {Ibias*1}
+i_bias4	14_Ibias 	10_V      {Ibias*4}
 
 ! Output side of current mirror
 !    Drain	Gate 	Source 	Bulk      Transistor Type and Size
@@ -47,7 +47,7 @@ m_8  12_Ibias  12_Ibias	22_m568	0	NMOS L=WL W={WL*10}
 Vout
 0
 5
-10u
+10m
 [ana]
 1 0
 [end]
