@@ -1,72 +1,46 @@
 [aimspice]
 [description]
-1408
+715
 TERM_PROJECT
 
-!Focuses on creating a current mirror discussed in chapter 6.3
+!Focuses on creating a current mirror discussed in chapter 6.3.1
 
 .include p18_cmos_models_tt.inc
 
-.param n = 1
-.param wl = 17
-.param l = 0.2u
+! Uses design from fig 6.12 in CJM.
+! Chosen n = 3.5
+.param wl = 27
+.param l = 2u
 .param w = {l*wl}
 
-VDD		Vdd		GND	1 dc
-Vout		Out		GND	3.3 dc
+VDD		Vdd	GND	3.3 dc
+Vout		Out	GND	3.3 dc ! Changed during simulation
 
-Ibias_1	Bias_1 	Vdd	-40u
-Iin_1		In_1		Vdd	-40u
+Ibias		Vdd 	Bias	50u
+Iin		Vdd	In	40u ! Changed during simulation
 
-!	Drain	Gate		Source	Base
-m1_1 Out	Bias_1	n1_1		GND 		NMOS L={l*2} W=w
-m2_1 n1_1	In_1   	GND   	GND		NMOS L=l W=w
-m3_1 n2_1	In_1		GND		GND		NMOS L=l W=w
-m4_1 In_1	Bias_1 	n2_1		GND		NMOS L={l*2} W=w
-m5_1 Bias_1 Bias_1 	GND		GND		NMOS L={l*8} W=w
-
-! Plot Output current alongside the Input current 
-.plot id(m1_1) id(m4_1)
-
-
-Ibias_2	Bias_2 	Vdd	-45u
-Iin_2		In_2		Vdd	-45u
-
-!	Drain	Gate		Source	Base
-m1_2 Out	Bias_2	n1_2		GND 		NMOS L={l*2} W=w
-m2_2 n1_2	In_2   	GND   	GND		NMOS L=l W=w
-m3_2 n2_2	In_2		GND		GND		NMOS L=l W=w
-m4_2 In_2	Bias_2 	n2_2		GND		NMOS L={l*2} W=w
-m5_2 Bias_2 Bias_2 	GND		GND		NMOS L={l*8} W=w
+!	Drain	Gate	Source	Base	Transistor Type and Size
+m1 	Out	Bias	n1		GND 	NMOS L={l*12.25} W=w
+m2 	n1	In	GND   	GND	NMOS L=l W=w
+m3 	n2	In	GND		GND	NMOS L=l W=w
+m4 	In	Bias	n2		GND	NMOS L={l*12.25} W=w
+m5 	Bias	Bias 	GND		GND	NMOS L={l} W={w/20.25}
 
 ! Plot Output current alongside the Input current 
-.plot id(m1_2) id(m4_2)
-
-
-Ibias_3	Bias_3 	Vdd	-50u
-Iin_3		In_3		Vdd	-50u
-
-!	Drain	Gate		Source	Base
-m1_3 Out	Bias_3	n1_3		GND 		NMOS L={l*2} W=w
-m2_3 n1_3	In_3   	GND   	GND		NMOS L=l W=w
-m3_3 n2_3	In_3		GND		GND		NMOS L=l W=w
-m4_3 In_3	Bias_3 	n2_3		GND		NMOS L={l*2} W=w
-m5_3 Bias_3 Bias_3 	GND		GND		NMOS L={l*8} W=w
-
-! Plot Output current alongside the Input current 
-.plot id(m1_3) id(m4_3)
+.plot id(m1) id(m4) 
 
 .connect GND 0
 
-
-
-
 [dc]
-1
+2
 Vout
-0.1
+0
 5
 10m
+Iin
+40u
+50u
+5u
 [ana]
 1 0
 [end]
