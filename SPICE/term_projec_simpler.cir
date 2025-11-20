@@ -1,16 +1,17 @@
 [aimspice]
 [description]
-514
+569
 TERM_PROJECT
 
 !Focuses on creating a current mirror discussed in chapter 6.3
 
 .include p18_cmos_models_tt.inc
 
-VDD		Vdd		GND 1 dc
+VDD		Vdd		GND	3.3 dc
+Vout		Out		GND	3.3 dc
 
-i_bias	Ibias 	Vdd 50u
-i_in		In  	     Vdd 50u
+i_bias	Ibias 	Vdd	-50u
+i_in		In		Vdd	-50u
 
 !   Drain	     Gate 	Source 	Base
 m_1 Out 	     1_bias 	n1 	     GND 		NMOS L=1u W=1u
@@ -20,5 +21,14 @@ m_4 In	     Ibias	n2   	GND		NMOS L=1u W=1u
 m_5 Ibias      Ibias	GND	     GND		NMOS L=1u W=1u
 
 .connect GND 0
-.plot id(m_4) id(m_3)
+.plot id(m_2) id(m_3)
+.plot id(m_1) id(m_4)
+[dc]
+1
+Vout
+0
+5
+10u
+[ana]
+1 0
 [end]
