@@ -1,6 +1,6 @@
 [aimspice]
 [description]
-1633
+1408
 TERM_PROJECT
 
 !Focuses on creating a current mirror discussed in chapter 6.3
@@ -8,11 +8,11 @@ TERM_PROJECT
 .include p18_cmos_models_tt.inc
 
 .param n = 1
-.param wl = 7
+.param wl = 17
 .param l = 0.2u
 .param w = {l*wl}
 
-VDD		Vdd		GND	3.3 dc
+VDD		Vdd		GND	1 dc
 Vout		Out		GND	3.3 dc
 
 Ibias_1	Bias_1 	Vdd	-40u
@@ -28,34 +28,20 @@ m5_1 Bias_1 Bias_1 	GND		GND		NMOS L={l*8} W=w
 ! Plot Output current alongside the Input current 
 .plot id(m1_1) id(m4_1)
 
-.param n = 1
-.param wl = 7
-.param l = 0.2u
-.param w = {l*wl}
-
-VDD		Vdd		GND	3.3 dc
-Vout		Out		GND	3.3 dc
 
 Ibias_2	Bias_2 	Vdd	-45u
 Iin_2		In_2		Vdd	-45u
 
 !	Drain	Gate		Source	Base
 m1_2 Out	Bias_2	n1_2		GND 		NMOS L={l*2} W=w
-m2_2 n1_2	In_1   	GND   	GND		NMOS L=l W=w
-m3_2 n2_2	In_1		GND		GND		NMOS L=l W=w
+m2_2 n1_2	In_2   	GND   	GND		NMOS L=l W=w
+m3_2 n2_2	In_2		GND		GND		NMOS L=l W=w
 m4_2 In_2	Bias_2 	n2_2		GND		NMOS L={l*2} W=w
 m5_2 Bias_2 Bias_2 	GND		GND		NMOS L={l*8} W=w
 
 ! Plot Output current alongside the Input current 
 .plot id(m1_2) id(m4_2)
 
-.param n = 1
-.param wl = 7
-.param l = 0.2u
-.param w = {l*wl}
-
-VDD		Vdd		GND	3.3 dc
-Vout		Out		GND	3.3 dc
 
 Ibias_3	Bias_3 	Vdd	-50u
 Iin_3		In_3		Vdd	-50u
@@ -78,7 +64,7 @@ m5_3 Bias_3 Bias_3 	GND		GND		NMOS L={l*8} W=w
 [dc]
 1
 Vout
-0
+0.1
 5
 10m
 [ana]
