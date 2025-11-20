@@ -1,6 +1,6 @@
 [aimspice]
 [description]
-619
+1633
 TERM_PROJECT
 
 !Focuses on creating a current mirror discussed in chapter 6.3
@@ -9,26 +9,70 @@ TERM_PROJECT
 
 .param n = 1
 .param wl = 7
-.param l = 0.5u
+.param l = 0.2u
 .param w = {l*wl}
 
 VDD		Vdd		GND	3.3 dc
 Vout		Out		GND	3.3 dc
 
-i_bias	Ibias 	Vdd	-50u
-i_in		In		Vdd	-50u
+Ibias_1	Bias_1 	Vdd	-40u
+Iin_1		In_1		Vdd	-40u
 
-!   Drain	Gate 		Source 	Base
-m_1 Out	Ibias 	n1		GND 		NMOS L={l*2} W=w
-m_2 n1	In   		GND   	GND 	     NMOS L=l W=w
-m_3 n2	In		GND		GND 	     NMOS L=l W=w
-m_4 In	Ibias		n2		GND		NMOS L={l*2} W=w
-m_5 Ibias	Ibias		GND		GND		NMOS L={l*8} W=w
+!	Drain	Gate		Source	Base
+m1_1 Out	Bias_1	n1_1		GND 		NMOS L={l*2} W=w
+m2_1 n1_1	In_1   	GND   	GND		NMOS L=l W=w
+m3_1 n2_1	In_1		GND		GND		NMOS L=l W=w
+m4_1 In_1	Bias_1 	n2_1		GND		NMOS L={l*2} W=w
+m5_1 Bias_1 Bias_1 	GND		GND		NMOS L={l*8} W=w
+
+! Plot Output current alongside the Input current 
+.plot id(m1_1) id(m4_1)
+
+.param n = 1
+.param wl = 7
+.param l = 0.2u
+.param w = {l*wl}
+
+VDD		Vdd		GND	3.3 dc
+Vout		Out		GND	3.3 dc
+
+Ibias_2	Bias_2 	Vdd	-45u
+Iin_2		In_2		Vdd	-45u
+
+!	Drain	Gate		Source	Base
+m1_2 Out	Bias_2	n1_2		GND 		NMOS L={l*2} W=w
+m2_2 n1_2	In_1   	GND   	GND		NMOS L=l W=w
+m3_2 n2_2	In_1		GND		GND		NMOS L=l W=w
+m4_2 In_2	Bias_2 	n2_2		GND		NMOS L={l*2} W=w
+m5_2 Bias_2 Bias_2 	GND		GND		NMOS L={l*8} W=w
+
+! Plot Output current alongside the Input current 
+.plot id(m1_2) id(m4_2)
+
+.param n = 1
+.param wl = 7
+.param l = 0.2u
+.param w = {l*wl}
+
+VDD		Vdd		GND	3.3 dc
+Vout		Out		GND	3.3 dc
+
+Ibias_3	Bias_3 	Vdd	-50u
+Iin_3		In_3		Vdd	-50u
+
+!	Drain	Gate		Source	Base
+m1_3 Out	Bias_3	n1_3		GND 		NMOS L={l*2} W=w
+m2_3 n1_3	In_3   	GND   	GND		NMOS L=l W=w
+m3_3 n2_3	In_3		GND		GND		NMOS L=l W=w
+m4_3 In_3	Bias_3 	n2_3		GND		NMOS L={l*2} W=w
+m5_3 Bias_3 Bias_3 	GND		GND		NMOS L={l*8} W=w
+
+! Plot Output current alongside the Input current 
+.plot id(m1_3) id(m4_3)
 
 .connect GND 0
 
-! Plot Output current alongside the Input current 
-.plot id(m_1) id(m_4)
+
 
 
 [dc]
