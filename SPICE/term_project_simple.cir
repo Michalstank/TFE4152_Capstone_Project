@@ -1,42 +1,49 @@
 [aimspice]
 [description]
-715
+788
 TERM_PROJECT
 
 !Focuses on creating a current mirror discussed in chapter 6.3.1
 
-.include p18_cmos_models_tt.inc
+.include p18_cmos_models_ss.inc
 
 ! Uses design from fig 6.12 in CJM.
-! Chosen n = 3.5
-.param wl = 27
-.param l = 2u
+! Chosen n = 3.5 - 12.25 - 20.25
+.param wl = 20 !27
+.param l = 0.9u
 .param w = {l*wl}
 
-VDD		Vdd	GND	3.3 dc
-Vout		Out	GND	3.3 dc ! Changed during simulation
 
+VDD		Vdd	GND	3.3 dc
 Ibias		Vdd 	Bias	50u
-Iin		Vdd	In	40u ! Changed during simulation
+
+! Changed during simulation
+Iin		Vdd	In	40u 
+Vout		Out	GND	3.3 dc
 
 !	Drain	Gate	Source	Base	Transistor Type and Size
 m1 	Out	Bias	n1		GND 	NMOS L={l*12.25} W=w
 m2 	n1	In	GND   	GND	NMOS L=l W=w
 m3 	n2	In	GND		GND	NMOS L=l W=w
 m4 	In	Bias	n2		GND	NMOS L={l*12.25} W=w
-m5 	Bias	Bias 	GND		GND	NMOS L={l} W={w/20.25}
+m5 	Bias	Bias 	GND		GND	NMOS L={l} W={w/25}
+.connect GND 0
 
 ! Plot Output current alongside the Input current 
 .plot id(m1) id(m4) 
+.defwave Pout = Vout*id(m1)
+.plot Pout
+.defwave rout = rds(m1)*rds(m2)gm(m1)
 
-.connect GND 0
-
+[options]
+1
+Temp 50
 [dc]
 2
 Vout
 0
 5
-10m
+1m
 Iin
 40u
 50u
