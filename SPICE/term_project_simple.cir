@@ -1,15 +1,15 @@
 [aimspice]
 [description]
-788
+786
 TERM_PROJECT
 
 !Focuses on creating a current mirror discussed in chapter 6.3.1
 
-.include p18_cmos_models_ss.inc
+.include p18_cmos_models_.inc
 
 ! Uses design from fig 6.12 in CJM.
 ! Chosen n = 3.5 - 12.25 - 20.25
-.param wl = 20 !27
+.param wl = 22 !27
 .param l = 0.9u
 .param w = {l*wl}
 
@@ -37,7 +37,7 @@ m5 	Bias	Bias 	GND		GND	NMOS L={l} W={w/25}
 
 [options]
 1
-Temp 50
+Temp 0
 [dc]
 2
 Vout
