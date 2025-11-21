@@ -1,21 +1,21 @@
 [aimspice]
 [description]
-786
+790
 TERM_PROJECT
 
 !Focuses on creating a current mirror discussed in chapter 6.3.1
 
-.include p18_cmos_models_.inc
+.include p18_cmos_models_tt.inc
 
 ! Uses design from fig 6.12 in CJM.
 ! Chosen n = 3.5 - 12.25 - 20.25
-.param wl = 22 !27
-.param l = 0.9u
+.param wl = 20 !27
+.param l = 0.905u
 .param w = {l*wl}
 
 
 VDD		Vdd	GND	3.3 dc
-Ibias		Vdd 	Bias	50u
+Ibias		Vdd 	Bias	45u
 
 ! Changed during simulation
 Iin		Vdd	In	40u 
