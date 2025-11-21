@@ -4,20 +4,23 @@
 	
 module DFF6NAND(
 	input  wire D  , 
-	input  wire CLK, 
+	input  wire CLK,
+	input  wire RST_n,
 	output wire Q  , 
 	output wire Qb
-	);
+	); 
 	
 	wire o1, o2, o3, o4;
+	wire reset_input;
 
 	nand G1(o1, o4, o2);
 	nand G2(o2, o1, CLK);
 	nand G3(o3, o2, CLK, o4);
-	nand G4(o4, o3, D);
+	nand G4(o4, o3, reset_input);
 	nand G5(Q , o2, Qb);
 	nand G6(Qb, Q , o3);
 	
+	assign reset_input  = RST_n ? D : 1'b0;
 endmodule
 
 // Since the state machine has 6 states the lowest needed register count is 3 for a total of 8 options
@@ -26,6 +29,7 @@ module REG3DFF6NAND(
 	input  wire D2 ,
 	input  wire D3 ,
 	input  wire CLK,
+	input  wire RST_n,
 	output wire Q1 ,
 	output wire Q1N,
 	output wire Q2 ,
@@ -34,9 +38,9 @@ module REG3DFF6NAND(
 	output wire Q3N
 	);
 	
-	DFF6NAND DFF1(D1, CLK, Q1, Q1N);
-	DFF6NAND DFF2(D2, CLK, Q2, Q2N);
-	DFF6NAND DFF3(D3, CLK, Q3, Q3N);
+	DFF6NAND DFF1(D1, CLK, RST_n, Q1, Q1N);
+	DFF6NAND DFF2(D2, CLK, RST_n, Q2, Q2N);
+	DFF6NAND DFF3(D3, CLK, RST_n, Q3, Q3N);
 	
 endmodule
 
@@ -53,97 +57,89 @@ module COMB_LOGIC(
 	output wire DS2,
 	output wire A
 	);
+
+	wire B_n;
+	nand ibb (B_n, B, B);
 	
 	// Output for A
 	// A = S0, B = S1, C = S2
-	// !ABC + A!B
-	
-	wire o0, o1, o2, o3, o4, o5, o6, o7, o8, o9;
-	
-	// Used for state bit updates
-	wire x0, x1, x2;
-	wire y0, y1, y2;
-	wire z0, z1, z2;
-	wire i_b, ib;
-	
-	// !ABC
-	nand A1 (o0, S0, S0);
-	nand A2 (o1, S1, S2);
-	nand A3 (o2, o1, o1);
-	nand A4 (o3, o2, o0);
-	nand A5 (o4, o3, o3);
+	// !ABC + A!B	
+	wire a0, a1;
 	
 	// A!B
-	nand A6 (o5, S1, S1);
-	nand A7 (o6, o5, S0);
-	nand A8 (o7, o6, o6);
+	nand A1_a (a0, S0, S1_n);
 	
-	// !ABC + A!B
-	nand A9 (o8, o4, o4);
-	nand A10(o9, o7, o7);
-	nand A11(A , o8, o9);
+	// !ABC
+	nand A3_a (a1, S0_n, S1, S2);
+
+	// A= !ABC + A!B
+	nand A5_a (A, a1, a0);
 	
-	// State Taransitions
 	
-	nand ii_b(i_b, B, B);
-	nand iib (ib , i_b, i_b);
 	
 	// S0
 	// !AB!C + A!BD + !B!C!D
-	// Not performing the double inversion needed for an AND gate since the end is an OR gate
-
-	//!AB!C
-	nand s0_0(x0, S0_n, S1, S2_n);
-
-	// A!BD					  
-	nand s0_1(x1, S0, S1_n, B);
+	wire s0_0, s0_1, s0_2;
+	
+	// !AB!C
+	nand S0_0(s0_0, S0_n, S1, S2_n);
+	
+	// A!BD
+	nand S0_1(s0_1, S0, S1_n, B);
 	
 	// !B!C!D
-	nand s0_2(x2, S1_n, S2_n, ib);
+	nand S0_2(s0_2, S1_n, S2_n, B_n);
 	
-	// Complete S0
-	nand s0_3(DS0, x0, x1, x2);
+	// S0 =
+	nand S0_3(DS0, s0_0, s0_1, s0_2);
+	
+	
 	
 	// S1
 	// A!B!C!D + !AC!D + !AB!D
+	wire s1_0, s1_1, s1_2;
 	
 	// A!B!C!D
-	nand s1_0(y0, S0, S1_n, S2_n, ib);
+	nand S1_0(s1_0, S0, S1_n, S2_n, B_n);
 	
 	// !AC!D
-	nand s1_1(y1, S0_n, S2, ib);
-
-	// !AB!D
-	nand s1_2(y2, S0_n, S1, ib);
+	nand S1_1(s1_1, S0_n, S2, B_n);
 	
-	// Complete S1
-	nand s1_3(DS1, y0, y1, y2);
+	// !AB!D
+	nand S1_2(s1_2, S0_n, S1, B_n);
+	
+	// S1 =
+	nand S1_3(DS1, s1_0, s1_1, s1_2);
+
+	
 	
 	// S2
 	// !ABCD + A!BD + A!BC
+	wire s2_0, s2_1, s2_2;
 	
 	// !ABCD
-	nand s2_0(z0, S0_n, S1, S2, B);
+	nand S2_0(s2_0, S0_n, S1, S2, B);
 	
 	// A!BD
-	nand s2_1(z1, S0, S1_n, B);
+	nand S2_1(s2_1, S0, S1_n, B);
 	
 	// A!BC
-	nand s2_2(z2, S0, S1_n, S2);
+	nand S2_2(s2_2, S0, S1_n, S2);
 	
 	// Complete S2
-	nand s2_3(DS2, z0, z1, z2);
+	nand S2_3(DS2, s2_0, s2_1, s2_2);
 endmodule
 
 module Tsetlin_FSM (
-	input  wire CLK, 
+	input  wire CLK,
+	input  wire RST_n,
 	input  wire B  , 	 
 	output wire A
 	);	
 	
 	wire s1 , s2 , s3, ds1, ds2, ds3;
-	wire Q1N, Q2N, Q3N;	
+	wire Q1N, Q2N, Q3N;
 
-	COMB_LOGIC 	comb (B , s1, s2, s3, Q1N, Q2N, Q3N, ds1, ds2, ds3, A);
-	REG3DFF6NAND 	state(ds1, ds2, ds3, CLK, s1 , Q1N, s2 , Q2N, s3, Q3N);
+	COMB_LOGIC 		comb (B  , s1 , s2 , s3 , Q1N  , Q2N, Q3N, ds1, ds2, ds3, A);
+	REG3DFF6NAND 	state(ds1, ds2, ds3, CLK, RST_n, s1 , Q1N, s2 , Q2N, s3, Q3N);
 endmodule
