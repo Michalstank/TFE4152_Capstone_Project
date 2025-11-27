@@ -9,7 +9,7 @@ TERM_PROJECT
 
 ! Uses design from fig 6.12 in CJM.
 ! Chosen n = 3.5 - 12.25 - 20.25
-.param wl = 20 !27
+.param wl = 20
 .param l = 0.905u
 .param w = {l*wl}
 
